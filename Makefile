@@ -2,35 +2,35 @@ UID := `id -u`
 GID := `id -g`
 UNAME := `id -un`
 GNAME := `id -gn`
-NAME := ubuntu20-${UNAME}
+NAME := ubuntu-${UNAME}
 HOMEDIR := /home/${UNAME}
 SSHPORT := 2022
-PASSWORD := password
+PASSWORD := 
 
 all:
 
 build:
-	docker build . --build-arg UNAME=${UNAME} --build-arg GNAME=${GNAME} --build-arg UID=${UID} --build-arg GID=${GID} --build-arg HOMEDIR=${HOMEDIR} -t ${NAME}
+	cd dockerbuildfiles && docker build . --build-arg UNAME=${UNAME} --build-arg GNAME=${GNAME} --build-arg UID=${UID} --build-arg GID=${GID} --build-arg HOMEDIR=${HOMEDIR} -t ${NAME}
 
 up: home opt srv home/.bashrc home/.profile 
 	echo ${UNAME}:${PASSWORD} >./home/.password
 	echo CONTAINER_NAME=${NAME} >./home/.container.sh
 	docker run --name ${NAME} -d -p ${SSHPORT}:${SSHPORT} -v ./opt:/opt -v ./srv:/srv -v ./home:${HOMEDIR} -e UNAME=${UNAME} -e GNAME=${GNAME} -e UID=${UID} -e GID=${GID} -e HOMEDIR=${HOMEDIR} -e CONTAINER_NAME=${NAME} -e SSHPORT=${SSHPORT} ${NAME}
 	
-home::
-	mkdir home
+home:
+	-mkdir home
 
 opt:
-	mkdir opt
+	-mkdir opt
 
 srv:
-	mkdir srv
+	-mkdir srv
 
 home/.bashrc:
-	cp files/_bashrc ./home/.bashrc
+	cp dockerbuildfiles/_bashrc ./home/.bashrc
 
 home/.profile:
-	cp files/_profile ./home/.profile
+	cp dockerbuildfiles/_profile ./home/.profile
 
 down:
 	-docker kill ${NAME}
