@@ -10,7 +10,7 @@ PASSWORD :=
 all:
 
 build:
-	cd dockerbuildfiles && docker build . --build-arg UNAME=${UNAME} --build-arg GNAME=${GNAME} --build-arg UID=${UID} --build-arg GID=${GID} --build-arg HOMEDIR=${HOMEDIR} -t ${NAME}
+	cd dockerbuildfiles && docker buildx build . --build-arg UNAME=${UNAME} --build-arg GNAME=${GNAME} --build-arg UID=${UID} --build-arg GID=${GID} --build-arg HOMEDIR=${HOMEDIR} -t ${NAME}
 
 up: home opt srv home/.bashrc home/.profile 
 	echo ${UNAME}:${PASSWORD} >./home/.password
