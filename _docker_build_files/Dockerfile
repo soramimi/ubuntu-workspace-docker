@@ -1,15 +1,16 @@
 FROM ubuntu:24.04
 
 RUN apt update
-RUN DEBIAN_FRONTEND=noninteractive apt install -y apt-utils sudo vim git iputils-ping net-tools rename openssh-server
+RUN DEBIAN_FRONTEND=noninteractive apt install -y apt-utils sudo locales vim git iputils-ping net-tools rename openssh-server
+RUN apt update
 RUN apt install -y software-properties-common
 RUN apt install -y build-essential clang libc++-dev cmake
 #RUN apt install -y libncurses5
 RUN apt install -y libncurses6
 RUN apt install -y python3 python3-pip ruby zstd wget curl
 RUN apt update
-RUN DEBIAN_FRONTEND=noninteractive apt install -y qtcreator qtbase5-dev
-RUN apt install -y geany
+#RUN DEBIAN_FRONTEND=noninteractive apt install -y qtcreator qtbase5-dev
+#RUN apt install -y geany
 
 ARG UID
 ARG GID
@@ -24,6 +25,11 @@ RUN groupadd -g ${GID} ${GNAME} && useradd -s /bin/bash -u ${UID} -g ${GID} ${UN
 COPY ./sudoers /etc/
 COPY ./sshd_config /etc/ssh/
 RUN mkdir -p /run/sshd
+
+COPY ./locale.gen /etc
+RUN locale-gen 
+COPY ./default_locale /etc/default/locale
+COPY ./environment /etc/
 
 COPY ./cmd /tmp/
 CMD ["/bin/sh", "/tmp/cmd"]

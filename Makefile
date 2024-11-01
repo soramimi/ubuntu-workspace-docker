@@ -10,7 +10,7 @@ PASSWORD :=
 all:
 
 build:
-	cd dockerbuildfiles && docker buildx build . --build-arg UNAME=${UNAME} --build-arg GNAME=${GNAME} --build-arg UID=${UID} --build-arg GID=${GID} --build-arg HOMEDIR=${HOMEDIR} -t ${NAME}
+	cd _docker_build_files && docker buildx build . --build-arg UNAME=${UNAME} --build-arg GNAME=${GNAME} --build-arg UID=${UID} --build-arg GID=${GID} --build-arg HOMEDIR=${HOMEDIR} -t ${NAME}
 
 up: home opt srv home/.bashrc home/.profile 
 	echo ${UNAME}:${PASSWORD} >./home/.password
@@ -27,10 +27,10 @@ srv:
 	-mkdir srv
 
 home/.bashrc:
-	cp dockerbuildfiles/_bashrc ./home/.bashrc
+	cp _docker_build_files/_bashrc ./home/.bashrc
 
 home/.profile:
-	cp dockerbuildfiles/_profile ./home/.profile
+	cp _docker_build_files/_profile ./home/.profile
 
 down:
 	-docker kill ${NAME}
