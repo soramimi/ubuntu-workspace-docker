@@ -1,4 +1,5 @@
 FROM ubuntu:24.04
+#FROM nvidia/cuda:12.6.3-devel-ubuntu24.04
 
 RUN apt update
 RUN DEBIAN_FRONTEND=noninteractive apt install -y apt-utils sudo locales vim git iputils-ping net-tools rename openssh-server
