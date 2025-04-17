@@ -12,6 +12,7 @@ RUN apt install -y python3 python3-pip ruby zstd wget curl
 RUN apt update
 #RUN DEBIAN_FRONTEND=noninteractive apt install -y qtcreator qtbase5-dev
 #RUN apt install -y geany
+RUN apt install -y golang npm
 
 ARG UID
 ARG GID
@@ -31,6 +32,8 @@ COPY ./locale.gen /etc
 RUN locale-gen 
 COPY ./default_locale /etc/default/locale
 COPY ./environment /etc/
+
+RUN npm install -g @openai/codex
 
 COPY ./cmd /tmp/
 CMD ["/bin/sh", "/tmp/cmd"]

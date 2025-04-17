@@ -2,7 +2,7 @@ UID := `id -u`
 GID := `id -g`
 UNAME := `id -un`
 GNAME := `id -gn`
-NAME := ubuntu-${UNAME}
+NAME := ubuntu-workspace-${UNAME}
 HOMEDIR := /home/${UNAME}
 SSHPORT := 65522
 PASSWORD :=
@@ -32,7 +32,7 @@ build:
 up: home srv home/.bashrc home/.profile 
 	echo ${UNAME}:${PASSWORD} >./home/.password
 	echo CONTAINER_NAME=${NAME} >./home/.container.sh
-	docker run --gpus all --name ${NAME} -d -p ${SSHPORT}:${SSHPORT} -v ./srv:/srv -v ./home:${HOMEDIR} -e UNAME=${UNAME} -e GNAME=${GNAME} -e UID=${UID} -e GID=${GID} -e HOMEDIR=${HOMEDIR} -e CONTAINER_NAME=${NAME} -e COMMAND=${COMMAND} -e SSHPORT=${SSHPORT} ${NAME}
+	docker run --gpus all --name ${NAME} -d -p ${SSHPORT}:${SSHPORT} -v ./srv:/srv -v ./home:${HOMEDIR} -v .:/workspace -e UNAME=${UNAME} -e GNAME=${GNAME} -e UID=${UID} -e GID=${GID} -e HOMEDIR=${HOMEDIR} -e CONTAINER_NAME=${NAME} -e COMMAND=${COMMAND} -e SSHPORT=${SSHPORT} ${NAME}
 
 _run: home home/.bashrc home/.profile 
 	echo ${RUN} >home/run.sh
